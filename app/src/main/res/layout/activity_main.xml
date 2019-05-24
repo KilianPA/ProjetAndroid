@@ -7,16 +7,21 @@
     tools:context=".MainActivity">
 
     <LinearLayout
-        android:id="@+id/linear_l"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+        <Button
+            android:id="@+id/addBtn"
+            android:text="Add New Item"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:onClick="addItems"/>
+
+        <ListView
+            android:id="@+id/list_view"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:drawSelectorOnTop="false" />
+    </LinearLayout>
 </android.support.constraint.ConstraintLayout>

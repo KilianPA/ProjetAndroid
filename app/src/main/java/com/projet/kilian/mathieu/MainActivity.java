@@ -12,12 +12,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.LinearLayout;
+import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Toast;
 import android.support.v4.app.ActivityCompat;
 import android.Manifest;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,8 +34,19 @@ public class MainActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions(this, new String[]{
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
         }, 1);
-    }
 
+        Button btn = (Button) findViewById(R.id.addBtn);
+        ListView list = (ListView) findViewById(R.id.list_view);
+        arrayList = new ArrayList<String>();
+
+        // Adapter: You need three parameters 'the context, id of the layout (it will be where the data is shown),
+        // and the array that contains the data
+        adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, arrayList);
+        list.setAdapter(adapter);
+
+    }
+    private ArrayList arrayList;
+    private ArrayAdapter adapter;
     private ServiceDownload serviceDownload;
     private long downloadID;
 
@@ -75,6 +90,12 @@ public class MainActivity extends AppCompatActivity {
 //            downloadID = serviceDownload.download(url);
 //            Toast.makeText(this, "test", Toast.LENGTH_LONG).show();
         }
+    }
+
+    public void addItems(View view) {
+        arrayList.add("TESET");
+        // next thing you have to do is check if your adapter has changed
+        adapter.notifyDataSetChanged();
     }
 
 //    public void onClickLiason(View view) {
