@@ -30,6 +30,23 @@ public class MainActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions(this, new String[]{
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
         }, 1);
+
+        ImagesBDD imageBdd = new ImagesBDD(this);
+
+        Images image = new Images("src/lepika","pikapika");
+
+        //On ouvre la base de données pour écrire dedans
+        imageBdd.open();
+        //On insère le livre que l'on vient de créer
+        imageBdd.insertLivre(image);
+
+        Images imageFromBdd = imageBdd.getImageWithName(image.getName());
+        //Si un livre est retourné (donc si le livre à bien été ajouté à la BDD)
+
+        //On affiche les infos du livre dans un Toast
+        Toast.makeText(this, imageFromBdd.toString(), Toast.LENGTH_LONG).show();
+
+        Log.i("[LOG MATHIEU]", imageFromBdd.toString());
     }
 
     private ServiceDownload serviceDownload;
