@@ -4,6 +4,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ImagesBDD {
     private static final int VERSION_BDD = 1;
@@ -64,9 +68,33 @@ public class ImagesBDD {
         return bdd.delete(TABLE_IMAGES, COL_ID + " = " +id, null);
     }
 
+    public ArrayList<Images> getAllImages() {
+        ArrayList<Images> movieDetailsList = new ArrayList();
+        String selectQuery = "SELECT * FROM " + TABLE_IMAGES
+                + " ORDER BY " + COL_ID + " ASC";
+        SQLiteDatabase db = this.bdd;
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        //if TABLE has rows
+        if (cursor.moveToFirst()) {
+            //Loop through the table rows
+            do {
+                Images image = new Images();
+                image.setId(cursor.getInt(0));
+                image.setPath(cursor.getString(1));
+                image.setName(cursor.getString(2));
+                //Add movie details to list
+                movieDetailsList.add(image);
+            } while (cursor.moveToNext());
+        }
+        db.close();
+
+        return movieDetailsList;
+    }
+
     public Images getImageWithName(String name){
         //Récupère dans un Cursor les valeurs correspondant à un livre contenu dans la BDD (ici on sélectionne le livre grâce à son titre)
-        Cursor c = bdd.query(TABLE_IMAGES, new String[] {COL_ID, COL_PATH, COL_NAME}, COL_NAME + " LIKE \"" + name +"\"", null, null, null, null);
+        Cursor c = bdd.query(TABLE_IMAGES, new String[] {COL_ID, COL_PATH, COL_NAME}, COL_NAME + " = \"" + name +"\"", null, null, null, null);
         return cursorToLivre(c);
     }
 

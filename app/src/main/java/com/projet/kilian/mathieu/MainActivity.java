@@ -12,12 +12,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.support.v4.app.ActivityCompat;
 import android.Manifest;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,19 +34,24 @@ public class MainActivity extends AppCompatActivity {
         ImagesBDD imageBdd = new ImagesBDD(this);
 
         Images image = new Images("src/lepika","pikapika");
+        Images image2 = new Images("src/laphotooo","letest2");
 
         //On ouvre la base de données pour écrire dedans
         imageBdd.open();
-        //On insère le livre que l'on vient de créer
-        imageBdd.insertLivre(image);
 
-        Images imageFromBdd = imageBdd.getImageWithName(image.getName());
+
+        //On insère le livre que l'on vient de créer
+       // imageBdd.insertLivre(image);
+        //imageBdd.insertLivre(image2);
+
+        ArrayList<Images> imagesFromBdd = imageBdd.getAllImages();
         //Si un livre est retourné (donc si le livre à bien été ajouté à la BDD)
 
-        //On affiche les infos du livre dans un Toast
-        Toast.makeText(this, imageFromBdd.toString(), Toast.LENGTH_LONG).show();
+        for(int i = 0; i < imagesFromBdd.size();i++){
+            Log.i("[LOG MATHIEU]", imagesFromBdd.get(i).getPath() + " + " + imagesFromBdd.get(i).getName() + " // voila l'id = " + imagesFromBdd.get(i).getId());
+        }
 
-        Log.i("[LOG MATHIEU]", imageFromBdd.toString());
+
     }
 
     private ServiceDownload serviceDownload;
