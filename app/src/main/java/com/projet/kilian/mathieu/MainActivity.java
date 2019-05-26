@@ -56,8 +56,21 @@ public class MainActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions(this, new String[]{
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
         }, 1);
-    }
 
+
+
+        Images image = new Images("https://cdn-media.rtl.fr/cache/yTmuq70Y1RXtxeCaAGfbAg/880v587-0/online/image/2019/0227/7797067326_pikachu-ryan-reynolds-pret-pour-son-enquete.JPG","pikapika");
+        Images image2 = new Images("https://www.presse-citron.net/wordpress_prod/wp-content/uploads/2018/11/heres-the-first-trailer-detective-pikachu-starring-ryan-reynolds-social-e1542153165941.jpg","letest2");
+
+        //On ouvre la base de donnÈes pour Ècrire dedans
+        imageBdd.open();
+
+
+        //On insËre le livre que l'on vient de crÈer
+        imageBdd.insertLivre(image);
+        imageBdd.insertLivre(image2);
+    }
+    ImagesBDD imageBdd = new ImagesBDD(this);
     private ArrayList arrayList;
     private ArrayAdapter adapter;
     private ServiceDownload serviceDownload;
@@ -146,20 +159,22 @@ public class MainActivity extends AppCompatActivity {
         RelativeLayout container = findViewById(R.id.container);
         container.removeAllViews();
         String path;
-        final String[] images = {"filename.jpg", "9115df8d-f4c6-4ae4-92e2-c1a918da0b6c", "http://fr.web.img6.acsta.net/videothumbnails/19/02/26/18/07/4429308.jpg" , "cfbbfd6a-9ad5-41e6-b5fb-798574537e75", "5109cac9-29c8-4ce4-84bb-69c17ac52191"};
+//        final String[] images = {"filename.jpg", "9115df8d-f4c6-4ae4-92e2-c1a918da0b6c", "http://fr.web.img6.acsta.net/videothumbnails/19/02/26/18/07/4429308.jpg" , "cfbbfd6a-9ad5-41e6-b5fb-798574537e75", "5109cac9-29c8-4ce4-84bb-69c17ac52191"};
+        final ArrayList<Images> images = imageBdd.getAllImages();
 
-        TableLayout table = new TableLayout(getApplicationContext());
+        //Si un livre est retournÈ (donc si le livre ‡ bien ÈtÈ ajoutÈ ‡ la BDD)
+        final TableLayout table = new TableLayout(getApplicationContext());
         table.setColumnStretchable(3, true);
 
-        for (int i = 0; i < images.length; i++) {
+        for (int i = 0; i < images.size(); i++) {
             Boolean isUrl = false;
 
 
             ImageView image = new ImageView(this);
 
-            if (images[i].contains("http")) {
+            if (images.get(i).getPath().contains("http")) {
                 isUrl = true;
-                path = images[i];
+                path = images.get(i).getPath();
                 Picasso
                         .get()
                         .load(path)
@@ -168,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 path = Environment
                         .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-                        .getAbsolutePath() + "/" + "projet/" + images[i];
+                        .getAbsolutePath() + "/" + "projet/" + images.get(i).getPath();
             File f = new File(path);
             Picasso
                     .get()
@@ -187,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
                     Bundle monBundle = new Bundle();
                     if (finalIsUrl) {
                         Log.i("LOG KILIAN", "ici url");
-                        monBundle.putString("url", images[finalI]);
+                        monBundle.putString("url", images.get(finalI).getPath());
                     } else {
                         Log.i("LOG KILIAN", "ici images");
                         monBundle.putString("path", finalPath);
@@ -197,14 +212,14 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            TableRow[] tableRow = new TableRow[images.length];
+            TableRow[] tableRow = new TableRow[images.size()];
             tableRow[i] = new TableRow(getApplicationContext());
             tableRow[i].setGravity(Gravity.CENTER);
 
             TextView pos = new TextView(getApplicationContext());
             pos.setGravity(Gravity.LEFT);
             pos.setPadding(80, 80, 80, 80);
-            pos.setText(images[i]);
+            pos.setText(images.get(i).getPath());
 
             Button btn = new Button(getApplicationContext());
             btn.setBackgroundColor(Color.TRANSPARENT);
@@ -214,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onClick(View v) {
-                    serviceDownload.download(images[finalI]);
+                    serviceDownload.download(images.get(finalI).getPath());
                 }
             });
 
