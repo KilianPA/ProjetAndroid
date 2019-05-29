@@ -18,8 +18,6 @@ public class ImagesBDD {
     private static final int NUM_COL_ID = 0;
     private static final String COL_PATH = "PATH";
     private static final int NUM_COL_PATH = 1;
-    private static final String COL_NAME = "NAME";
-    private static final int NUM_COL_NAME = 2;
 
     private SQLiteDatabase bdd;
 
@@ -44,28 +42,39 @@ public class ImagesBDD {
         return bdd;
     }
 
-    public long insertLivre(Images images) {
+    public long insertImage(Images images) {
         //CrÈation d'un ContentValues (fonctionne comme une HashMap)
         ContentValues values = new ContentValues();
         //on lui ajoute une valeur associÈe ‡ une clÈ (qui est le nom de la colonne dans laquelle on veut mettre la valeur)
         values.put(COL_PATH, images.getPath());
-        values.put(COL_NAME, images.getName());
         //on insËre l'objet dans la BDD via le ContentValues
         return bdd.insert(TABLE_IMAGES, null, values);
     }
 
-    public int updateLivre(int id, Images images) {
-        //La mise ‡ jour d'un livre dans la BDD fonctionne plus ou moins comme une insertion
-        //il faut simplement prÈciser quel livre on doit mettre ‡ jour gr‚ce ‡ l'ID
+    public int updateImage(int id, Images images) {
+        //La mise ‡ jour d'un image dans la BDD fonctionne plus ou moins comme une insertion
+        //il faut simplement prÈciser quel image on doit mettre ‡ jour gr‚ce ‡ l'ID
         ContentValues values = new ContentValues();
         values.put(COL_PATH, images.getPath());
-        values.put(COL_NAME, images.getName());
         return bdd.update(TABLE_IMAGES, values, COL_ID + " = " + id, null);
     }
 
-    public int removeLivreWithID(int id) {
-        //Suppression d'un livre de la BDD gr‚ce ‡ l'ID
+    public int updatePath(int id, String path) {
+        //La mise ‡ jour d'un image dans la BDD fonctionne plus ou moins comme une insertion
+        //il faut simplement prÈciser quel image on doit mettre ‡ jour gr‚ce ‡ l'ID
+        ContentValues values = new ContentValues();
+        values.put(COL_PATH, path);
+        return bdd.update(TABLE_IMAGES, values, COL_ID + " = " + id, null);
+    }
+
+    public int removeImageWithID(int id) {
+        //Suppression d'un image de la BDD gr‚ce ‡ l'ID
         return bdd.delete(TABLE_IMAGES, COL_ID + " = " + id, null);
+    }
+
+    public int cleardelatable() {
+        //Suppression d'un image de la BDD gr‚ce ‡ l'ID
+        return bdd.delete(TABLE_IMAGES, COL_ID, null);
     }
 
     public ArrayList<Images> getAllImages() {
@@ -82,7 +91,6 @@ public class ImagesBDD {
                 Images image = new Images();
                 image.setId(cursor.getInt(0));
                 image.setPath(cursor.getString(1));
-                image.setName(cursor.getString(2));
                 //Add movie details to list
                 movieDetailsList.add(image);
             } while (cursor.moveToNext());
@@ -92,30 +100,29 @@ public class ImagesBDD {
         return movieDetailsList;
     }
 
-    public Images getImageWithName(String name) {
-        //RÈcupËre dans un Cursor les valeurs correspondant ‡ un livre contenu dans la BDD (ici on sÈlectionne le livre gr‚ce ‡ son titre)
-        Cursor c = bdd.query(TABLE_IMAGES, new String[]{COL_ID, COL_PATH, COL_NAME}, COL_NAME + " = \"" + name + "\"", null, null, null, null);
-        return cursorToLivre(c);
+    public Images getImageWithName(String path) {
+        //RÈcupËre dans un Cursor les valeurs correspondant ‡ un image contenu dans la BDD (ici on sÈlectionne le image gr‚ce ‡ son titre)
+        Cursor c = bdd.query(TABLE_IMAGES, new String[]{COL_ID, COL_PATH}, COL_PATH + " = \"" + path + "\"", null, null, null, null);
+        return cursorToImage(c);
     }
 
-    //Cette mÈthode permet de convertir un cursor en un livre
-    private Images cursorToLivre(Cursor c) {
+    //Cette mÈthode permet de convertir un cursor en un image
+    private Images cursorToImage(Cursor c) {
         //si aucun ÈlÈment n'a ÈtÈ retournÈ dans la requÍte, on renvoie null
         if (c.getCount() == 0)
             return null;
 
         //Sinon on se place sur le premier ÈlÈment
         c.moveToFirst();
-        //On crÈÈ un livre
+        //On crÈÈ un image
         Images img = new Images();
         //on lui affecte toutes les infos gr‚ce aux infos contenues dans le Cursor
         img.setId(c.getInt(NUM_COL_ID));
         img.setPath(c.getString(NUM_COL_PATH));
-        img.setName(c.getString(NUM_COL_NAME));
         //On ferme le cursor
         c.close();
 
-        //On retourne le livre
+        //On retourne le image
         return img;
     }
 

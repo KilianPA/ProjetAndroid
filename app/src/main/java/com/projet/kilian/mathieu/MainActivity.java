@@ -57,18 +57,17 @@ public class MainActivity extends AppCompatActivity {
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
         }, 1);
 
-
-
         Images image = new Images("https://cdn-media.rtl.fr/cache/yTmuq70Y1RXtxeCaAGfbAg/880v587-0/online/image/2019/0227/7797067326_pikachu-ryan-reynolds-pret-pour-son-enquete.JPG","pikapika");
         Images image2 = new Images("https://www.presse-citron.net/wordpress_prod/wp-content/uploads/2018/11/heres-the-first-trailer-detective-pikachu-starring-ryan-reynolds-social-e1542153165941.jpg","letest2");
 
         //On ouvre la base de donnÈes pour Ècrire dedans
         imageBdd.open();
 
-
         //On insËre le livre que l'on vient de crÈer
-        imageBdd.insertLivre(image);
-        imageBdd.insertLivre(image2);
+        imageBdd.insertImage(image);
+        imageBdd.insertImage(image2);
+
+        imageBdd.cleardelatable();
     }
     ImagesBDD imageBdd = new ImagesBDD(this);
     private ArrayList arrayList;
