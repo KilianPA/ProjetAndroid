@@ -7,4 +7,9 @@
         android:icon="@drawable/ic_add_black_24dp"
         android:title="Item"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/dl_item"
+        android:icon="@drawable/ic_file_download_black_24dp"
+        android:title="Item"
+        app:showAsAction="always" />
 </menu>

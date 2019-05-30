@@ -19,6 +19,8 @@ public class ImagesBDD {
     private static final String COL_PATH = "PATH";
     private static final int NUM_COL_PATH = 1;
 
+    private static boolean open = false;
+
     private SQLiteDatabase bdd;
 
     private MaBaseSQLite maBaseSQLite;
@@ -31,11 +33,17 @@ public class ImagesBDD {
     public void open() {
         //on ouvre la BDD en Ècriture
         bdd = maBaseSQLite.getWritableDatabase();
+        open = true;
+    }
+
+    public static boolean isOpen() {
+        return open;
     }
 
     public void close() {
         //on ferme l'accËs ‡ la BDD
         bdd.close();
+        open = false;
     }
 
     public SQLiteDatabase getBDD() {
@@ -100,9 +108,9 @@ public class ImagesBDD {
         return movieDetailsList;
     }
 
-    public Images getImageWithName(String path) {
+    public Images getImageWithId(int id) {
         //RÈcupËre dans un Cursor les valeurs correspondant ‡ un image contenu dans la BDD (ici on sÈlectionne le image gr‚ce ‡ son titre)
-        Cursor c = bdd.query(TABLE_IMAGES, new String[]{COL_ID, COL_PATH}, COL_PATH + " = \"" + path + "\"", null, null, null, null);
+        Cursor c = bdd.query(TABLE_IMAGES, new String[]{COL_ID}, COL_ID + " = \"" + id + "\"", null, null, null, null);
         return cursorToImage(c);
     }
 

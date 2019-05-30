@@ -7,7 +7,7 @@ public class Images {
 
     public Images(){}
 
-    public Images(String path1, String name1){
+    public Images(String path1){
         this.path = path1;
     }
 
