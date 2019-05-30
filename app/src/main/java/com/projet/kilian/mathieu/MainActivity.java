@@ -105,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
                 monBuilder.show();
+                break;
             case R.id.dl_item:
                 Log.i("[LOG KILIAN]", String.valueOf(listeImages.size()));
                 if (listeImages.size() > 0) {
