@@ -40,10 +40,11 @@ public class ServiceDownload extends Service {
 
     public long download(ArrayList<Images> listesImages, ImagesBDD imageBdd) {
         Log.i("[LOG KILIAN]", "DOWNLOAD RUN");
-
+        // On boucle sur listesImages et on telecharge chaque photo
         for (int i = 0; i < listesImages.size(); i++) {
             Log.i("[LOG KILIAN]", listesImages.get(i).getPath());
 
+            //On génère un nom à notre image
             String filename = UUID.randomUUID().toString();
 
             File direct =
@@ -51,10 +52,12 @@ public class ServiceDownload extends Service {
                             .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
                             .getAbsolutePath() + "/" + "projet" + "/");
 
+            // Si notre dossier n'existe pas on le créé
             if (!direct.exists()) {
                 direct.mkdir();
             }
-
+            // Pour telecharger nos images on utilise le DowloadManager
+            //https://developer.android.com/reference/android/app/DownloadManager
             DownloadManager dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
             Uri downloadUri = Uri.parse(listesImages.get(i).getPath());
             DownloadManager.Request request = new DownloadManager.Request(downloadUri);
@@ -69,9 +72,10 @@ public class ServiceDownload extends Service {
             imageBdd.open();
             imageBdd.updatePath(listesImages.get(i).getId(), filename);
             imageBdd.close();
-
+            // On ajoute le telechargement à la queue
             dm.enqueue(request);
         }
+        // On return une valeur pour signifier à notre BroadCast Receiver que les téléchargements sont terminés
         return 1;
 
     }
