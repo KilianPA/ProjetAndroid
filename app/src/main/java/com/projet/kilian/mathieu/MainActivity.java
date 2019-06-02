@@ -54,14 +54,22 @@ public class MainActivity extends AppCompatActivity {
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
         }, 1);
 
+//        imageBdd.cleardelatable();
+
+        imageBdd.open();
+
         Images image = new Images("https://cdn-media.rtl.fr/cache/yTmuq70Y1RXtxeCaAGfbAg/880v587-0/online/image/2019/0227/7797067326_pikachu-ryan-reynolds-pret-pour-son-enquete.JPG");
         Images image2 = new Images("https://www.presse-citron.net/wordpress_prod/wp-content/uploads/2018/11/heres-the-first-trailer-detective-pikachu-starring-ryan-reynolds-social-e1542153165941.jpg");
-        //On ouvre la base de donnÈes pour Ècrire dedans
-//        imageBdd.cleardelatable();
-//
-//        //On insËre le livre que l'on vient de crÈer
-//        imageBdd.insertImage(image);
-//        imageBdd.insertImage(image2);
+
+        final ArrayList<Images> monimage = imageBdd.getAllImages();
+
+        if(monimage.size() == 0){
+            imageBdd.open();
+            imageBdd.insertImage(image);
+            imageBdd.insertImage(image2);
+            imageBdd.close();
+        }
+        imageBdd.close();
 
     }
     ImagesBDD imageBdd = new ImagesBDD(this);
@@ -164,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
         String path;
 //        final String[] images = {"filename.jpg", "9115df8d-f4c6-4ae4-92e2-c1a918da0b6c", "http://fr.web.img6.acsta.net/videothumbnails/19/02/26/18/07/4429308.jpg" , "cfbbfd6a-9ad5-41e6-b5fb-798574537e75", "5109cac9-29c8-4ce4-84bb-69c17ac52191"};
         imageBdd.open();
+
         final ArrayList<Images> images = imageBdd.getAllImages();
 
         //Si un livre est retournÈ (donc si le livre ‡ bien ÈtÈ ajoutÈ ‡ la BDD)
